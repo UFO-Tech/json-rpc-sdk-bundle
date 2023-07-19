@@ -6,7 +6,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -18,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class UfoRpcSdkGenerateCommand extends Command
 {
-    const COMMAND_NAME = 'ufo:rpc:sdk-generate';
+    const COMMAND_NAME = 'ufo:sdk:make';
 
 
     public function __construct()
@@ -32,7 +31,6 @@ class UfoRpcSdkGenerateCommand extends Command
         $this
             ->addArgument('vendor', InputArgument::REQUIRED, 'Vendor name for SDK namespace')
             ->addArgument('api_url', InputArgument::REQUIRED, 'API url for get rpc json documentation')
-            ->addOption('token', 't', InputOption::VALUE_REQUIRED, 'Security token')
         ;
     }
 
@@ -43,7 +41,8 @@ class UfoRpcSdkGenerateCommand extends Command
 
             $vendorName = trim($input->getArgument('vendor'), '"');
             $apiUrl = trim($input->getArgument('api_url'), '"');
-            $token = trim($input->getOption('token'), '"');
+
+            $generator =
 
             $result = '';
             $io->writeln($result);
