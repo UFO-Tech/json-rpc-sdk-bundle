@@ -1,0 +1,47 @@
+{
+    "name": "ufo-tech/json-rpc-sdk-bundle",
+    "description": "The Symfony bundle for simple usage Json-RPC api with dynamic SDK",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alex Maystrenko",
+            "email": "ashterix69@gmail.com"
+        },
+        {
+            "name": "Vladislav Beregovoy",
+            "email": "bereg.vs@gmail.com"
+        }
+    ],
+    "type" : "symfony-bundle",
+    "homepage": "https://github.com/UFO-Tech/json-rpc-sdk-bundle",
+    "keywords" : ["sdk", "sdk-generate", "generator", "ufo", "symfony", "api", "bundle", "json-rpc"],
+    "require" : {
+        "php": ">=8.1",
+        "symfony/framework-bundle": "6.*",
+        "symfony/serializer": "6.*",
+        "ufo-tech/json-rpc-client-sdk": "1.*",
+        "symfony/console": "6.*",
+        "symfony/http-kernel": "6.*"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Ufo\\JsonRpcSdkBundle\\" : "src/"
+        }
+    },
+    "extra" : {
+        "branch-alias" : {
+            "dev-master" : "1.0.x-dev"
+        },
+        "symfony": {
+            "endpoint": [
+                "https://api.github.com/repos/ufo-tech/recipes/contents/index.json?ref=main"
+            ]
+        }
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
+        }
+    }
+}
