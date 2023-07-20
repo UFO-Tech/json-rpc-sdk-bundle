@@ -1,13 +1,13 @@
 <?php
 
-namespace Ufo\JsonRpcBundle;
+namespace Ufo\JsonRpcSdkBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class UfoJsonRpcBundle extends Bundle
+class UfoJsonRpcSdkBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
     }
