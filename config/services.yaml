@@ -4,6 +4,9 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-
-    Ufo\RpcSdk\Client\:
-        resource: '../vendor/ufo-tech/json-rpc-client-sdk/sdk'
+    Ufo\JsonRpcSdkBundle\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/JsonRpcSdkBundle.php'
+   
