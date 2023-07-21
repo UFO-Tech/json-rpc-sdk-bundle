@@ -30,7 +30,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayPrototype()
                     ->children()
                         ->scalarNode('name')->isRequired()->end()
-                        ->scalarNode('url')->isRequired()->validate()->url()->end()
+                        ->scalarNode('url')->isRequired()->end()
                         ->scalarNode('token_key')->end()
                         ->scalarNode('token')->end()
                     ->end()
