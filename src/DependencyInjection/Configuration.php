@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Default TreeBuilder name
      */
-    const TREE_BUILDER_NAME = 'ufo_json_rpc_sdk';
+    const TREE_BUILDER_NAME = 'json_rpc_sdk';
 
     /**
      * {@inheritdoc}
