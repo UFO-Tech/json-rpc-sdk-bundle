@@ -25,23 +25,19 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder(self::TREE_BUILDER_NAME);
         $rootNode = $treeBuilder->getRootNode();
 
-        $rootNode
-            ->children()
-                ->arrayNode('vendors')
+        $rootNode->children()
+            ->arrayNode('vendors')
+                ->arrayPrototype()
                     ->children()
-                        ->arrayNode('protected_methods')
-                            ->scalarPrototype()->end()
-                        ->end()
-                        ->scalarNode('token_key_in_header')
-                            ->defaultValue('Ufo-RPC-Token')
-                        ->end()
-                        ->arrayNode('clients_tokens')
-                            ->scalarPrototype()->end()
-                        ->end()
+                        ->scalarNode('name')->isRequired()->end()
+                        ->scalarNode('url')->isRequired()->validate()->url()->end()
+                        ->scalarNode('token_key')->end()
+                        ->scalarNode('token')->end()
                     ->end()
                 ->end()
             ->end()
-        ;
+        ->end()
+    ;
         return $treeBuilder;
     }
 }

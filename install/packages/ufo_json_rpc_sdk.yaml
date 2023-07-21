@@ -1,2 +1,10 @@
 # config/packages/ufo_json_rpc_sdk.yaml
 ufo_json_rpc_sdk:
+    vendors:
+        - name: vendor1
+          url: https://vendor1.com/api
+          
+        - name: vendor2
+          url: https://vendor2.com/api
+          token_key: some-key
+          token: dsfsdfsdfsdfsdfsd32
