@@ -59,7 +59,8 @@ class RpcSdkMakeCommand extends Command
                 apiVendorAlias: $vendorName,
                 headers: $headers,
                 namespace: $this->getRootNamespace(),
-                cacheLifeTimeSecond: Maker::DEFAULT_CACHE_LIFETIME // 3600
+                cacheLifeTimeSecond: Maker::DEFAULT_CACHE_LIFETIME,
+                cache: $this->container->get('cache.app')
             );
 
             $io->writeln("Start make SDK for '$vendorName' ($apiUrl)");
