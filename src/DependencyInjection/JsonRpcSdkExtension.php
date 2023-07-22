@@ -27,9 +27,9 @@ class JsonRpcSdkExtension extends Extension
         $this->container = $container;
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        $this->container->setParameter('ufo_json_rpc_sdk', $config);
+        $this->container->setParameter(Configuration::TREE_BUILDER_NAME, $config);
 
-        $this->mapTreeToParams($config, 'ufo_json_rpc_sdk');
+        $this->mapTreeToParams($config, Configuration::TREE_BUILDER_NAME);
 
         $loader = new Loader\YamlFileLoader($this->container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yaml');
@@ -48,7 +48,7 @@ class JsonRpcSdkExtension extends Extension
 
     public function getAlias(): string
     {
-        return 'json_rpc_sdk';
+        return Configuration::TREE_BUILDER_NAME;
     }
 
 }

@@ -26,6 +26,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode->children()
+            ->scalarNode('namespace')->defaultValue('App\Sdk')->end()
             ->arrayNode('vendors')
                 ->arrayPrototype()
                     ->children()
@@ -36,8 +37,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-        ->end()
-    ;
+        ->end();
         return $treeBuilder;
     }
 }

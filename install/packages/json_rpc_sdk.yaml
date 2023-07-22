@@ -1,5 +1,6 @@
 # config/packages/json_rpc_sdk.yaml
 json_rpc_sdk:
+    namespace: App\Sdk
     vendors:
         - name: vendor1
           url: https://vendor1.com/api

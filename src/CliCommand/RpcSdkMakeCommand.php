@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Ufo\RpcSdk\Maker\Definitions\ClassDefinition;
 use Ufo\RpcSdk\Maker\Maker;
 use UfoCms\ColoredCli\CliColor;
@@ -23,17 +24,17 @@ class RpcSdkMakeCommand extends Command
 {
     const COMMAND_NAME = 'ufo:sdk:make';
 
+    protected ContainerInterface $container;
 
     public function __construct(protected KernelInterface $kernel)
     {
+        $this->container = $kernel->getContainer();
         parent::__construct();
     }
 
-
     protected function configure(): void
     {
-        $this
-            ->addArgument('vendor', InputArgument::REQUIRED, 'Vendor name for SDK namespace')
+        $this->addArgument('vendor', InputArgument::REQUIRED, 'Vendor name for SDK namespace')
             ->addArgument('api_url', InputArgument::REQUIRED, 'API url for get rpc json documentation')
             ->addOption('token_name', 't', InputOption::VALUE_OPTIONAL, 'Security token key in header')
             ->addOption('token', 's', InputOption::VALUE_OPTIONAL, 'Security token value');
@@ -57,11 +58,11 @@ class RpcSdkMakeCommand extends Command
                 apiUrl: $apiUrl,
                 apiVendorAlias: $vendorName,
                 headers: $headers,
-                namespace: $this->getRootNamespace(), // 'Ufo\RpcSdk\Client'
+                namespace: $this->getRootNamespace(),
                 cacheLifeTimeSecond: Maker::DEFAULT_CACHE_LIFETIME // 3600
             );
 
-            $io->writeln("Start generate SDK for '$vendorName' ($apiUrl)");
+            $io->writeln("Start make SDK for '$vendorName' ($apiUrl)");
 
             $maker->make(function (ClassDefinition $classDefinition) use ($io) {
 
@@ -78,7 +79,7 @@ class RpcSdkMakeCommand extends Command
                 echo str_repeat('=', 20) . PHP_EOL;
             });
 
-            $io->writeln('Generate SDK is complete');
+            $io->writeln('Make SDK is complete');
 
             return Command::SUCCESS;
         } catch (\Throwable $e) {
@@ -90,9 +91,14 @@ class RpcSdkMakeCommand extends Command
         }
     }
 
-    protected function getRootNamespace()
+    protected function getRootNamespace(): string
     {
-        $ref = new \ReflectionObject($this->kernel);
-        return $ref->getNamespaceName() . '\Sdk';
+        if ($this->container->hasParameter('json_rpc_sdk.namespace')) {
+            $namespace = $this->container->getParameter('json_rpc_sdk.namespace');
+        } else {
+            $ref = new \ReflectionObject($this->kernel);
+            $namespace= $ref->getNamespaceName() . '\Sdk';
+        }
+        return $namespace;
     }
 }
