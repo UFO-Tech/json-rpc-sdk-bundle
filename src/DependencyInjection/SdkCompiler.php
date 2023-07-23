@@ -31,7 +31,7 @@ class SdkCompiler implements CompilerPassInterface
                     $header = [
                         $vendors[$ref->getNamespaceName()]['token_key'] => $vendors[$ref->getNamespaceName()]['token'],
                     ];
-                    $definition->setArgument('headers', $header);
+                    $definition->setArgument('$headers', $header);
                 }
             } catch (\Throwable) {
                 continue;
