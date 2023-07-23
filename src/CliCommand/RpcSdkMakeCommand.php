@@ -25,6 +25,7 @@ class RpcSdkMakeCommand extends Command
     const COMMAND_NAME = 'ufo:sdk:make';
 
     protected ContainerInterface $container;
+    protected SymfonyStyle $io;
 
     public function __construct(protected KernelInterface $kernel)
     {
@@ -42,7 +43,8 @@ class RpcSdkMakeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $this->io = new SymfonyStyle($input, $output);
+
         try {
             $vendorName = trim($input->getArgument('vendor'));
             $apiUrl = trim($input->getArgument('api_url'));
@@ -63,28 +65,17 @@ class RpcSdkMakeCommand extends Command
                 cache: $this->container->get('cache.app')
             );
 
-            $io->writeln("Start make SDK for '$vendorName' ($apiUrl)");
+            $this->io->section("<fg=bright-magenta>SDK for '$vendorName' ($apiUrl):</>");
 
-            $maker->make(function (ClassDefinition $classDefinition) use ($io) {
-
-                echo 'Create class: ' . CliColor::LIGHT_BLUE->value . $classDefinition->getFullName() . CliColor::RESET->value . PHP_EOL;
-                echo 'Methods: ' . PHP_EOL;
-                foreach ($classDefinition->getMethods() as $method) {
-                    echo CliColor::CYAN->value .
-                        $method->getName() .
-                        '(' . $method->getArgumentsSignature() . ')' .
-                        (!empty($method->getReturns()) ? ':' : '') .
-                        implode('|', $method->getReturns()) .
-                        CliColor::RESET->value . PHP_EOL;
-                }
-                echo str_repeat('=', 20) . PHP_EOL;
+            $maker->make(function (ClassDefinition $classDefinition) {
+                $this->printResult($classDefinition);
             });
 
-            $io->writeln('Make SDK is complete');
+            $this->io->title("<fg=cyan>SDK for $vendorName ($apiUrl) complete</>");
 
             return Command::SUCCESS;
         } catch (\Throwable $e) {
-            $io->getErrorStyle()->error([
+            $this->io->getErrorStyle()->error([
                 $e->getMessage(),
                 $e->getFile() . ': ' . $e->getLine(),
             ]);
@@ -101,5 +92,21 @@ class RpcSdkMakeCommand extends Command
             $namespace= $ref->getNamespaceName() . '\Sdk';
         }
         return $namespace;
+    }
+
+    protected function printResult(ClassDefinition $classDefinition): void
+    {
+        $this->io->writeln('Class: <question>' . $classDefinition->getFullName() . '</>');
+        $this->io->writeln('Methods: ');
+
+        $methhodsInfo = [];
+        foreach ($classDefinition->getMethods() as $method) {
+            $methhodsInfo[] = '<comment>' . $method->getName() . '</comment>' .
+                '<info>(' . $method->getArgumentsSignature() . ')</info>' .
+                '<comment>' . (!empty($method->getReturns()) ? ':' : '') .
+                implode('|', $method->getReturns()) . '</>';
+        }
+
+        $this->io->listing($methhodsInfo);
     }
 }

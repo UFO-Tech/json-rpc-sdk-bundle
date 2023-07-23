@@ -37,7 +37,7 @@ class RpcSdkGenerateCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         try {
-            $io->writeln("Start generate SDK from configs");
+            $io->title("<options=bold>Start generate SDK from configs</>");
 
             foreach ($this->getVendors() as $vendorData) {
                 $command = $this->getApplication()->get('ufo:sdk:make');
@@ -49,7 +49,7 @@ class RpcSdkGenerateCommand extends Command
                 ]);
                 $command->run($childInput, $output);
             }
-            $io->writeln('Generate SDK is complete');
+            $io->success('Generate SDK is complete');
 
             return Command::SUCCESS;
         } catch (\Throwable $e) {
