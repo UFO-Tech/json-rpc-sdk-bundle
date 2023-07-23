@@ -5,9 +5,10 @@ namespace Ufo\JsonRpcSdkBundle\DependencyInjection;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Ufo\RpcSdk\Interfaces\ISdkMethodClass;
 
-class SdkCompiler  implements CompilerPassInterface
+class SdkCompiler implements CompilerPassInterface
 {
 
     public function process(ContainerBuilder $container): void
@@ -18,8 +19,7 @@ class SdkCompiler  implements CompilerPassInterface
         foreach ($container->getParameter(Configuration::TREE_BUILDER_NAME . '.vendors') as $vendorData) {
             $vendors[$ns . '\\' . Str::asCamelCase($vendorData['name'])] = $vendorData;
         }
-
-        $services = $container->findDefinition(ISdkMethodClass::class);
+        $services = $container->findTaggedServiceIds('ufo.sdk_method_class');
         foreach ($services as $id => $service) {
             try {
                 $definition = $container->findDefinition($id);
@@ -29,14 +29,14 @@ class SdkCompiler  implements CompilerPassInterface
                     && isset($vendorData['token_key'])
                 ) {
                     $header = [
-                        $vendors[$ref->getNamespaceName()]['token_key'] => $vendors[$ref->getNamespaceName()]['token']
+                        $vendors[$ref->getNamespaceName()]['token_key'] => $vendors[$ref->getNamespaceName()]['token'],
                     ];
                     $definition->setArgument('headers', $header);
                 }
             } catch (\Throwable) {
                 continue;
             }
-
         }
+
     }
 }
