@@ -7,10 +7,10 @@ The Symfony bundle for simple usage Json-RPC. And automatically generation SDK f
 
 Package for easy api creation SDK and DTO for json-rpc server
 
-![License](https://img.shields.io/badge/license-MIT-green?labelColor=7b8185) ![Size](https://img.shields.io/github/repo-size/ufo-tech/jjson-rpc-sdk-bundle?label=Size%20of%20the%20repository) ![package_version](https://img.shields.io/github/v/tag/ufo-tech/jjson-rpc-sdk-bundle?color=blue&label=Latest%20Version&logo=Packagist&logoColor=white&labelColor=7b8185) ![fork](https://img.shields.io/github/forks/ufo-tech/jjson-rpc-sdk-bundle?color=green&logo=github&style=flat)
+![License](https://img.shields.io/badge/license-MIT-green?labelColor=7b8185) ![Size](https://img.shields.io/github/repo-size/ufo-tech/json-rpc-sdk-bundle?label=Size%20of%20the%20repository) ![package_version](https://img.shields.io/github/v/tag/ufo-tech/json-rpc-sdk-bundle?color=blue&label=Latest%20Version&logo=Packagist&logoColor=white&labelColor=7b8185) ![fork](https://img.shields.io/github/forks/ufo-tech/json-rpc-sdk-bundle?color=green&logo=github&style=flat)
 
 ### Environmental requirements
-![php_version](https://img.shields.io/packagist/dependency-v/ufo-tech/jjson-rpc-sdk-bundle/php?logo=PHP&logoColor=white) ![symfony_version](https://img.shields.io/packagist/dependency-v/ufo-tech/jjson-rpc-sdk-bundle/symfony/framework-bundle?label=Symfony&logo=Symfony&logoColor=white) ![symfony_version](https://img.shields.io/packagist/dependency-v/ufo-tech/jjson-rpc-sdk-bundle/symfony/serializer?label=SymfonySerializer&logo=Symfony&logoColor=white)
+![php_version](https://img.shields.io/packagist/dependency-v/ufo-tech/json-rpc-sdk-bundle/php?logo=PHP&logoColor=white) ![symfony_version](https://img.shields.io/packagist/dependency-v/ufo-tech/json-rpc-sdk-bundle/symfony/framework-bundle?label=Symfony&logo=Symfony&logoColor=white) ![symfony_version](https://img.shields.io/packagist/dependency-v/ufo-tech/json-rpc-sdk-bundle/symfony/serializer?label=SymfonySerializer&logo=Symfony&logoColor=white)
 
 # What's new?
 
@@ -148,9 +148,9 @@ For batch generating just run without arguments (arguments will be passed from c
 bin/console ufo:sdk:generate
 ```
 Done! You have generated SDK.
-> :warning: **NOTE! 
+> :warning: **NOTE!**
 > 
-> RPC server answer will be cached for 1 HOUR. If you need to clear it and request api again, run:**
+> **RPC server answer will be cached for 1 HOUR. If you need to clear it and request api again, run:**
 > ```shell
 > bin/console cache:clear
 >```
