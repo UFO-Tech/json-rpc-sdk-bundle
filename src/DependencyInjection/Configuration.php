@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('url')->isRequired()->end()
                         ->scalarNode('token_key')->end()
                         ->scalarNode('token')->end()
+                        ->scalarNode('async_secret')->end()
                     ->end()
                 ->end()
             ->end()

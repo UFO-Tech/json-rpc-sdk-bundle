@@ -19,7 +19,12 @@ class SdkCompiler implements CompilerPassInterface
         foreach ($container->getParameter(Configuration::TREE_BUILDER_NAME . '.vendors') as $vendorData) {
             $vendors[$ns . '\\' . Str::asCamelCase($vendorData['name'])] = $vendorData;
         }
-        $services = $container->findTaggedServiceIds('ufo.sdk_method_class');
+        $this->processSyncMethods($container, $vendors);
+    }
+
+    protected function processSyncMethods(ContainerBuilder $container, array $vendors): void
+    {
+        $services = $container->findTaggedServiceIds(ISdkMethodClass::TAG);
         foreach ($services as $id => $service) {
             try {
                 $definition = $container->findDefinition($id);
@@ -37,6 +42,24 @@ class SdkCompiler implements CompilerPassInterface
                 continue;
             }
         }
-
+    }
+    protected function processAsyncMethods(ContainerBuilder $container, array $vendors): void
+    {
+        $services = $container->findTaggedServiceIds(ISdkMethodClass::ASYNC_TAG);
+        foreach ($services as $id => $service) {
+            try {
+                $definition = $container->findDefinition($id);
+                $ref = new \ReflectionClass($definition->getClass());
+                $vendorData = $vendors[$ref->getNamespaceName()];
+                if (isset($vendorData['token'])) {
+                    $definition->setArgument('$token', $vendors[$ref->getNamespaceName()]['token']);
+                }
+                if (isset($vendorData['async_secret'])) {
+                    $definition->setArgument('$secretAsync', $vendors[$ref->getNamespaceName()]['async_secret']);
+                }
+            } catch (\Throwable) {
+                continue;
+            }
+        }
     }
 }
