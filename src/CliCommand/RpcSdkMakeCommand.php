@@ -62,7 +62,8 @@ class RpcSdkMakeCommand extends Command
                 headers: $headers,
                 namespace: $this->getRootNamespace(),
                 cacheLifeTimeSecond: Maker::DEFAULT_CACHE_LIFETIME,
-                cache: $this->container->get('cache.app')
+                cache: $this->container->get('cache.app'),
+                urlInAttr: $this->getUrlInSdk()
             );
 
             $this->io->section("<fg=bright-magenta>SDK for '$vendorName' ($apiUrl):</>");
@@ -92,6 +93,15 @@ class RpcSdkMakeCommand extends Command
             $namespace= $ref->getNamespaceName() . '\Sdk';
         }
         return $namespace;
+    }
+
+    protected function getUrlInSdk(): bool
+    {
+        $inSdk = false;
+        if ($this->container->hasParameter('json_rpc_sdk.generate_url_in_attr')) {
+            $inSdk = $this->container->getParameter('json_rpc_sdk.generate_url_in_attr');
+        }
+        return $inSdk;
     }
 
     protected function printResult(ClassDefinition $classDefinition): void

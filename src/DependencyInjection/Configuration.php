@@ -4,6 +4,7 @@ namespace Ufo\JsonRpcSdkBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Ufo\JsonRpcBundle\ConfigService\RpcSecurityConfig;
 
 /**
  * This is the class that validates and merges configuration from your app/config files.
@@ -27,6 +28,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode->children()
             ->scalarNode('namespace')->defaultValue('App\Sdk')->end()
+            ->booleanNode('generate_url_in_attr')->defaultValue(false)->end()
             ->arrayNode('vendors')
                 ->arrayPrototype()
                     ->children()
