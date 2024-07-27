@@ -61,6 +61,7 @@ class RpcSdkMakeCommand extends Command
                 apiVendorAlias: $vendorName,
                 headers: $headers,
                 namespace: $this->getRootNamespace(),
+                projectRootDir: $this->container->getParameter('kernel.project_dir'),
                 cacheLifeTimeSecond: Maker::DEFAULT_CACHE_LIFETIME,
                 cache: $this->container->get('cache.app'),
                 urlInAttr: $this->getUrlInSdk()
