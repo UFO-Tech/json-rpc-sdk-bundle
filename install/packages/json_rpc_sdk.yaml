@@ -7,3 +7,4 @@ json_rpc_sdk:
           url: '%env(resolve:VENDOR_1_API_HOST)%'
           token_key: '%env(resolve:VENDOR_1_API_KEY)%'
           token: '%env(resolve:VENDOR_1_API_TOKEN)%'
+          async_secret: '%env(resolve:VENDOR_ASYNC_SECRET)%'

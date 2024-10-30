@@ -20,6 +20,7 @@ class SdkCompiler implements CompilerPassInterface
             $vendors[$ns . '\\' . Str::asCamelCase($vendorData['name'])] = $vendorData;
         }
         $this->processSyncMethods($container, $vendors);
+        $this->processAsyncMethods($container, $vendors);
     }
 
     protected function processSyncMethods(ContainerBuilder $container, array $vendors): void
