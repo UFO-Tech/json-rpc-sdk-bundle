@@ -1,7 +1,7 @@
 {
     "name": "ufo-tech/json-rpc-sdk-bundle",
     "description": "The Symfony bundle for simple usage Json-RPC api with dynamic SDK",
-    "version": "2.2.1",
+    "version": "2.3.0",
     "license": "MIT",
     "authors": [
         {
@@ -16,7 +16,7 @@
         "php": ">=8.2",
         "symfony/framework-bundle": ">=6.4",
         "symfony/serializer": ">=6.4",
-        "ufo-tech/json-rpc-client-sdk": "^3.2",
+        "ufo-tech/json-rpc-client-sdk": "^3.4",
         "symfony/console": ">=6.4",
         "symfony/http-kernel": ">=6.4"
     },
