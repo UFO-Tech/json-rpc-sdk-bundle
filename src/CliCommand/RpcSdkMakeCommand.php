@@ -16,6 +16,8 @@ use UfoCms\ColoredCli\CliColor;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+use function trim;
+
 #[AsCommand(
     name: RpcSdkMakeCommand::COMMAND_NAME,
     description: 'Make SDK classes for RPC procedures',
@@ -45,9 +47,12 @@ class RpcSdkMakeCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
+        $vendorName = trim($input->getArgument('vendor'));
+        $apiUrl = trim($input->getArgument('api_url'));
+
+        $this->io->section("<fg=bright-magenta>SDK for '$vendorName' ($apiUrl):</>");
         try {
-            $vendorName = trim($input->getArgument('vendor'));
-            $apiUrl = trim($input->getArgument('api_url'));
+
             $headers = [];
             try {
                 $tokenKey = trim($input->getOption('token_name'));
@@ -67,7 +72,6 @@ class RpcSdkMakeCommand extends Command
                 urlInAttr: $this->getUrlInSdk()
             );
 
-            $this->io->section("<fg=bright-magenta>SDK for '$vendorName' ($apiUrl):</>");
 
             $maker->make(function (ClassDefinition $classDefinition) {
                 $this->printResult($classDefinition);
