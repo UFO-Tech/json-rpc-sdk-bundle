@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 )]
 class RpcSdkMakeCommand extends Command
 {
-    const COMMAND_NAME = 'ufo:sdk:make';
+    const string COMMAND_NAME = 'ufo:sdk:make';
 
     protected ContainerInterface $container;
     protected SymfonyStyle $io;
@@ -62,7 +62,7 @@ class RpcSdkMakeCommand extends Command
                 headers: $headers,
                 namespace: $this->getRootNamespace(),
                 projectRootDir: $this->container->getParameter('kernel.project_dir'),
-                cacheLifeTimeSecond: Maker::DEFAULT_CACHE_LIFETIME,
+                cacheLifeTimeSecond: $this->getCacheTTL(),
                 cache: $this->container->get('cache.app'),
                 urlInAttr: $this->getUrlInSdk()
             );
@@ -103,6 +103,15 @@ class RpcSdkMakeCommand extends Command
             $inSdk = $this->container->getParameter('json_rpc_sdk.generate_url_in_attr');
         }
         return $inSdk;
+    }
+
+    protected function getCacheTTL(): int
+    {
+        $ttl = Maker::DEFAULT_CACHE_LIFETIME;
+        if ($this->container->hasParameter('json_rpc_sdk.cache.ttl')) {
+            $ttl = $this->container->getParameter('json_rpc_sdk.cache.ttl');
+        }
+        return $ttl;
     }
 
     protected function printResult(ClassDefinition $classDefinition): void

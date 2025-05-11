@@ -2,6 +2,8 @@
 json_rpc_sdk:
     namespace: App\SDK
     generate_url_in_attr: false
+    cache:
+        ttl: 3600
     vendors:
         - name: Vendor_1
           url: '%env(resolve:VENDOR_1_API_HOST)%'

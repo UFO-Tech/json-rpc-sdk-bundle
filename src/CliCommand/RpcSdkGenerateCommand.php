@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 )]
 class RpcSdkGenerateCommand extends Command
 {
-    const COMMAND_NAME = 'ufo:sdk:generate';
+    const string COMMAND_NAME = 'ufo:sdk:generate';
 
     protected ContainerInterface $container;
 
@@ -40,9 +40,8 @@ class RpcSdkGenerateCommand extends Command
         $vendors = $this->getVendors($vendorName);
 
         $io = new SymfonyStyle($input, $output);
+        $io->title("<options=bold>Start generate SDK from configs</>");
         try {
-            $io->title("<options=bold>Start generate SDK from configs</>");
-
             foreach ($vendors as $vendorData) {
                 $command = $this->getApplication()->get('ufo:sdk:make');
                 $childInput = new ArrayInput([
