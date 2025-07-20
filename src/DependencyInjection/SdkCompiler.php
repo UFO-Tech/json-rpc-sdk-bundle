@@ -6,6 +6,7 @@ use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Throwable;
 use Ufo\RpcSdk\Interfaces\ISdkMethodClass;
 
 class SdkCompiler implements CompilerPassInterface
@@ -30,7 +31,9 @@ class SdkCompiler implements CompilerPassInterface
             try {
                 $definition = $container->findDefinition($id);
                 $ref = new \ReflectionClass($definition->getClass());
-                $vendorData = $vendors[$ref->getNamespaceName()];
+
+                $vendorData = $this->getVendors($vendors, $ref);
+
                 if (isset($vendorData['token'])
                     && isset($vendorData['token_key'])
                 ) {
@@ -51,7 +54,9 @@ class SdkCompiler implements CompilerPassInterface
             try {
                 $definition = $container->findDefinition($id);
                 $ref = new \ReflectionClass($definition->getClass());
-                $vendorData = $vendors[$ref->getNamespaceName()];
+
+                $vendorData = $this->getVendors($vendors, $ref);
+
                 if (isset($vendorData['token'])) {
                     $definition->setArgument('$token', $vendors[$ref->getNamespaceName()]['token']);
                 }
@@ -62,5 +67,20 @@ class SdkCompiler implements CompilerPassInterface
                 continue;
             }
         }
+    }
+
+    protected function getVendors(array &$vendors, \ReflectionClass $ref): array
+    {
+        $namespace = $ref->getNamespaceName();
+
+        if (!isset($vendors[$namespace])) {
+            $parentNamespace = $ref->getParentClass()?->getNamespaceName();
+            if ($parentNamespace && isset($vendors[$parentNamespace])) {
+                $vendors[$namespace] = $vendors[$parentNamespace];
+                $namespace = $parentNamespace;
+            }
+        }
+
+        return $vendors[$namespace];
     }
 }
