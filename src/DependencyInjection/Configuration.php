@@ -5,6 +5,7 @@ namespace Ufo\JsonRpcSdkBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Ufo\JsonRpcBundle\ConfigService\RpcSecurityConfig;
+use Ufo\RpcSdk\Maker\Definitions\Configs\ConfigsHolder;
 use Ufo\RpcSdk\Maker\Maker;
 
 /**
@@ -32,7 +33,7 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('generate_url_in_attr')->defaultValue(false)->end()
             ->arrayNode('cache')
                 ->children()
-                    ->integerNode('ttl')->defaultValue(Maker::DEFAULT_CACHE_LIFETIME)->end()
+                    ->integerNode('ttl')->defaultValue(ConfigsHolder::DEFAULT_CACHE_LIFETIME)->end()
                 ->end()
             ->end()
             ->arrayNode('vendors')

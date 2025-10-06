@@ -40,13 +40,14 @@ class RpcSdkGenerateCommand extends Command
         $vendors = $this->getVendors($vendorName);
 
         $io = new SymfonyStyle($input, $output);
-        $io->title("<options=bold>Start generate SDK from configs</>");
         try {
+            $io->title("<options=bold>Start generate SDK from configs</>");
+
             foreach ($vendors as $vendorData) {
                 $command = $this->getApplication()->get('ufo:sdk:make');
                 $childInput = new ArrayInput([
                     'vendor' => $vendorData['name'],
-                    'api_url' => $vendorData['url'],
+                    'api_doc' => $vendorData['url'],
                     '-t' => ($vendorData['token_key'] ?? ''),
                     '-s' => ($vendorData['token'] ?? ''),
                 ]);
