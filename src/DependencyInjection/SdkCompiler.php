@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Throwable;
 use Ufo\RpcSdk\Interfaces\ISdkMethodClass;
+use Ufo\RpcSdk\Procedures\ResponseTransformer\Interfaces\IResponseHandler;
 
 class SdkCompiler implements CompilerPassInterface
 {
@@ -27,6 +28,10 @@ class SdkCompiler implements CompilerPassInterface
     protected function processSyncMethods(ContainerBuilder $container, array $vendors): void
     {
         $services = $container->findTaggedServiceIds(ISdkMethodClass::TAG);
+        $responseHandlers = array_map(
+            fn (string $id) => $container->findDefinition($id),
+            array_keys($container->findTaggedServiceIds(IResponseHandler::TAG))
+        );
         foreach ($services as $id => $service) {
             try {
                 $definition = $container->findDefinition($id);
@@ -42,6 +47,7 @@ class SdkCompiler implements CompilerPassInterface
                     ];
                     $definition->setArgument('$headers', $header);
                 }
+                $definition->setArgument('$handlers', $responseHandlers);
             } catch (\Throwable) {
                 continue;
             }

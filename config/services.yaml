@@ -9,4 +9,6 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/JsonRpcSdkBundle.php'
-   
+
+    Ufo\RpcSdk\Procedures\ResponseTransformer\:
+      resource: '../../json-rpc-client-sdk/src/Procedures/ResponseTransformer/'
