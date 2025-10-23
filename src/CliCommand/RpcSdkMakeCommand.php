@@ -102,8 +102,8 @@ class RpcSdkMakeCommand extends Command
                 configsHolder: $configHolder,
                 generator: $generator,
                 makers: [
-                    new SdkDtoMaker($configHolder, $generator),
                     new SdkEnumMaker($configHolder, $generator),
+                    new SdkDtoMaker($configHolder, $generator),
                     new SdkProcedureMaker($configHolder, $generator),
                     new SdkConfigMaker($configHolder, $generator),
                 ]
