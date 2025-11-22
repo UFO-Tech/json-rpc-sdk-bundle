@@ -12,6 +12,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+use function implode;
+
 #[AsCommand(
     name: RpcSdkGenerateCommand::COMMAND_NAME,
     description: 'Generate SDK classes for RPC procedures from configs',
@@ -50,6 +52,7 @@ class RpcSdkGenerateCommand extends Command
                     'api_doc' => $vendorData['url'],
                     '-t' => ($vendorData['token_key'] ?? ''),
                     '-s' => ($vendorData['token'] ?? ''),
+                    '-i' => implode(',', $vendorData['ignore_methods'] ?? ''),
                 ]);
                 $command->run($childInput, $output);
             }

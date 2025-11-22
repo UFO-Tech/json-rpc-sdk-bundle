@@ -100,7 +100,61 @@ json_rpc_sdk:
           url: https://orders-api.example.com/api-rpc # Required: Url of endpoint of JsonRPC
           token_key: some-key # Optional: Name of Header token if security enabled  
           token: dsfsdfsdfsdfsdfsd32 # Optional: Value of Header token if security enabled
+          ignore_methods: # Optional: List of methods to ignore in generation SDK
+            - '*test'
 ```
+
+### 🔍 Filtering methods during SDK generation
+
+The SDK supports skipping RPC methods during generation.  
+This is done using the `ignore_methods` option, which accepts a list of masks.
+
+**📌 Mask Rules**
+- `*` — any sequence of characters
+- `!` at the beginning — **inversion (always generate)**
+- `&` at the beginning or after `!` — indicates a sync request
+- `~` at the beginning or after `!` — indicates an async request
+- Other characters are **literals**, meaning they represent themselves
+
+**✔️ Example masks**
+
+| Mask               | Description                                                                      |
+|--------------------|----------------------------------------------------------------------------------|
+| `AdminApi.*`       | ignores all methods of `AdminApi` class                                          |
+| `Command.run`      | ignores only `Command.run`                                                       |
+| `#Command.run`     | ignores only `Command.run` in sync API                                           |
+| `*.delete`         | ignores all `delete()` methods in any class                                      |
+| `!~Comment.delete` | **always generates `Comment.delete` for async API even if `*.delete` blocks it** |
+| `*.*Test`          | ignores all methods ending with `Test`                                           |
+
+**🚫 Prohibited**
+
+| Mask            | Reason                                   |
+|-----------------|------------------------------------------|
+| `User.?pdate`   | `?` is not supported                     |
+| `~&User.update` | `~` and `&` in one mask is not supported |
+| `[A-Z]*.create` | regex is not supported                   |
+
+**📎 Usage Example**
+
+```yaml
+# config/packages/json_rpc_sdk.yaml
+json_rpc_sdk:
+  #...
+  vendors:
+    - name: orders # Required: Name of vendor namespace
+      #...
+      ignore_methods: # Optional: List of methods to ignore in generation SDK
+        - 'AdminApi.*'       # Exclude all methods of AdminApi class
+        - 'Command.run'      # Exclude method Command.run
+        - '*.delete'         # Exclude all delete() methods in any class
+        - '!Comment.delete'  # Always generate Comment.delete API even if *.delete blocks it
+        - '*.*Test'          # Exclude all methods ending with Test
+```
+
+Masks allow you to easily remove service procedures, test methods, and unwanted CRUD operations from SDK generation.
+
+
 #### .ENV
 You can pass tokens to access the provider api via environment variables
 ```configs

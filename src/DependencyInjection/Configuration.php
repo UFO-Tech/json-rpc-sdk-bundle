@@ -4,9 +4,7 @@ namespace Ufo\JsonRpcSdkBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Ufo\JsonRpcBundle\ConfigService\RpcSecurityConfig;
 use Ufo\RpcSdk\Maker\Definitions\Configs\ConfigsHolder;
-use Ufo\RpcSdk\Maker\Maker;
 
 /**
  * This is the class that validates and merges configuration from your app/config files.
@@ -44,6 +42,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('token_key')->end()
                         ->scalarNode('token')->end()
                         ->scalarNode('async_secret')->end()
+                        ->arrayNode('ignore_methods')
+                            ->scalarPrototype()->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end()
