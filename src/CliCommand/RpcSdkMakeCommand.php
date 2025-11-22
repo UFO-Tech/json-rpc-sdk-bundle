@@ -29,7 +29,10 @@ use Ufo\RpcSdk\Maker\SdkProcedureMaker;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+use function array_filter;
 use function count;
+use function explode;
+use function readline;
 use function str_starts_with;
 use function trim;
 
@@ -52,10 +55,12 @@ class RpcSdkMakeCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('vendor', InputArgument::REQUIRED, 'Vendor name for SDK namespace')
-             ->addArgument('api_doc', InputArgument::REQUIRED, 'API URL or local file path for RPC JSON documentation')
-             ->addOption('token_name', 't', InputOption::VALUE_OPTIONAL, 'Security token key in header')
-             ->addOption('token', 's', InputOption::VALUE_OPTIONAL, 'Security token value');
+        $this->addArgument('vendor', mode: InputArgument::REQUIRED, description: 'Vendor name for SDK namespace')
+             ->addArgument('api_doc', mode: InputArgument::REQUIRED, description: 'API URL or local file path for RPC JSON documentation')
+             ->addOption('token_name', 't', mode: InputOption::VALUE_OPTIONAL, description: 'Security token key in header')
+             ->addOption('token', 's', mode: InputOption::VALUE_OPTIONAL, description: 'Security token value')
+             ->addOption('ignore', 'i', mode: InputOption::VALUE_OPTIONAL, description: 'Enter methods to ignore (comma separated)')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -66,6 +71,7 @@ class RpcSdkMakeCommand extends Command
             $vendorName = trim($input->getArgument('vendor'));
             $apiDoc = trim($input->getArgument('api_doc'));
             $headers = [];
+            $ignore = array_filter(explode(',', $input->getOption('ignore')));
             try {
                 $tokenKey = trim($input->getOption('token_name'));
                 $token = trim($input->getOption('token'));
@@ -84,7 +90,8 @@ class RpcSdkMakeCommand extends Command
                 namespace: $this->getRootNamespace(),
                 urlInAttr: $this->getUrlInSdk(),
                 cacheLifeTimeSecond: $this->getCacheTTL(),
-                cache: $this->container->get('cache.app')
+                cache: $this->container->get('cache.app'),
+                ignoredMethods: $ignore
             );
             $generator = new Generator(
                 new FileManager(
