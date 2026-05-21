@@ -1,5 +1,25 @@
 .idea/
 /vendor/
+/.env.local
+/build
+/.phpunit.cache
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
 .env
 /composer.lock
-/var
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+.idea
+/.env.install
+/logs/nginx/
+/docker/configs/nginx/project.conf
+/sdk/
+/bin/test.php
+/MakefileCustom
