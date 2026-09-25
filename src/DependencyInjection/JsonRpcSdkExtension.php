@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Ufo\Component\TransportContracts\AsyncTransportResolverInterface;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -14,6 +15,8 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class JsonRpcSdkExtension extends Extension
 {
+    public const string ASYNC_TRANSPORT_RESOLVER_TAG = 'ufo.async_transport_resolver';
+
     /**
      * @var ContainerBuilder
      */
@@ -30,6 +33,9 @@ class JsonRpcSdkExtension extends Extension
         $this->container->setParameter(Configuration::TREE_BUILDER_NAME, $config);
 
         $this->mapTreeToParams($config, Configuration::TREE_BUILDER_NAME);
+
+        $this->container->registerForAutoconfiguration(AsyncTransportResolverInterface::class)
+            ->addTag(self::ASYNC_TRANSPORT_RESOLVER_TAG);
 
         $loader = new Loader\YamlFileLoader($this->container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yaml');

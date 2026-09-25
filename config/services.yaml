@@ -1,14 +1,18 @@
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    Ufo\JsonRpcSdkBundle\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/JsonRpcSdkBundle.php'
+  Ufo\JsonRpcSdkBundle\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/JsonRpcSdkBundle.php'
 
-    Ufo\RpcSdk\Procedures\ResponseTransformer\:
-      resource: '../../json-rpc-client-sdk/src/Procedures/ResponseTransformer/'
+  Ufo\RpcSdk\Procedures\ResponseTransformer\:
+    resource: '../../json-rpc-client-sdk/src/Procedures/ResponseTransformer/'
+
+  Ufo\Component\TransportContracts\AsyncTransportFactory:
+    arguments:
+      $asyncTransportResolvers: !tagged_iterator ufo.async_transport_resolver

@@ -5,6 +5,7 @@ namespace Ufo\JsonRpcSdkBundle\DependencyInjection;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Throwable;
 use Ufo\RpcSdk\Interfaces\ISdkMethodClass;
@@ -28,10 +29,7 @@ class SdkCompiler implements CompilerPassInterface
     protected function processSyncMethods(ContainerBuilder $container, array $vendors): void
     {
         $services = $container->findTaggedServiceIds(ISdkMethodClass::TAG);
-        $responseHandlers = array_map(
-            fn (string $id) => $container->findDefinition($id),
-            array_keys($container->findTaggedServiceIds(IResponseHandler::TAG))
-        );
+        $responseHandlers = $this->sortedResponseHandlers($container);
         foreach ($services as $id => $service) {
             try {
                 $definition = $container->findDefinition($id);
@@ -53,6 +51,31 @@ class SdkCompiler implements CompilerPassInterface
             }
         }
     }
+
+    /**
+     * Обробники відповіді — у тому порядку, який оголосили вони самі.
+     *
+     * @return Definition[]
+     */
+    protected function sortedResponseHandlers(ContainerBuilder $container): array
+    {
+        $handlers = [];
+
+        foreach (array_keys($container->findTaggedServiceIds(IResponseHandler::TAG)) as $id) {
+            $definition = $container->findDefinition($id);
+            $class = $definition->getClass();
+
+            $handlers[] = [
+                'definition' => $definition,
+                'priority' => is_a($class, IResponseHandler::class, true) ? $class::PRIORITY : IResponseHandler::PRIORITY,
+            ];
+        }
+
+        usort($handlers, static fn (array $a, array $b): int => $b['priority'] <=> $a['priority']);
+
+        return array_column($handlers, 'definition');
+    }
+
     protected function processAsyncMethods(ContainerBuilder $container, array $vendors): void
     {
         $services = $container->findTaggedServiceIds(ISdkMethodClass::ASYNC_TAG);

@@ -1,7 +1,6 @@
 {
     "name": "ufo-tech/json-rpc-sdk-bundle",
     "description": "The Symfony bundle for simple usage Json-RPC api with dynamic SDK",
-    "version": "3.2.0",
     "license": "MIT",
     "authors": [
         {
@@ -9,27 +8,37 @@
             "email": "ashterix69@gmail.com"
         }
     ],
-    "type" : "symfony-bundle",
+    "type": "symfony-bundle",
     "homepage": "https://docs.ufo-tech.space/bin/view/docs/JsonRpcSdkBundle/?language=en",
-    "keywords" : ["sdk", "sdk-generate", "generator", "ufo", "symfony", "api", "bundle", "json-rpc"],
-    "require" : {
-        "php": ">=8.3",
-        "symfony/framework-bundle": "^7.3",
-        "symfony/serializer": "^7.3",
-        "ufo-tech/json-rpc-client-sdk": "^4.3.0",
-        "symfony/console": "^7.3",
-        "symfony/http-kernel": "^7.3"
+    "keywords": [
+        "sdk",
+        "sdk-generate",
+        "generator",
+        "ufo",
+        "symfony",
+        "api",
+        "bundle",
+        "json-rpc"
+    ],
+    "require": {
+        "php": ">=8.4",
+        "symfony/framework-bundle": "^7.3|^8.0",
+        "symfony/serializer": "^7.3|^8.0",
+        "ufo-tech/json-rpc-client-sdk": "^5.0",
+        "ufo-tech/component-transport-contracts": "^1",
+        "symfony/console": "^7.3|^8.0",
+        "symfony/http-kernel": "^7.3|^8.0"
     },
     "require-dev": {
-        "symfony/framework-bundle": "^7.3",
+        "symfony/framework-bundle": "^7.3|^8.0",
         "phpunit/phpunit": "^11.0"
     },
-    "autoload" : {
-        "psr-4" : {
-            "Ufo\\JsonRpcSdkBundle\\" : "src/"
+    "autoload": {
+        "psr-4": {
+            "Ufo\\JsonRpcSdkBundle\\": "src/"
         }
     },
-    "extra" : {
+    "extra": {
         "symfony": {
             "endpoint": [
                 "https://api.github.com/repos/ufo-tech/recipes/contents/index.json?ref=main"
